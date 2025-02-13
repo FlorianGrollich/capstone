@@ -7,8 +7,8 @@ const App: React.FC = () => {
             Hockey Stats
         </div>
 
-    )
+    );
 
-}
+};
 
-export default App
+export default App;
