@@ -1,10 +1,10 @@
-from ai.detect_ball import detect_best_ball
-from ai.draw_ball import draw_ball
-from merge_binary_img import merge_binary_images
-from color_removal import color_removal
-from hough_trasnform import hough_transform
-from img_show import show
-from sobel import sobel
+from helpers.detect_ball import detect_best_ball
+from helpers.draw_ball import draw_ball
+from helpers.merge_binary_img import merge_binary_images
+from helpers.color_removal import color_removal
+from helpers.hough_trasnform import hough_transform
+from helpers.img_show import show
+from helpers.sobel import sobel
 import cv2
 
 i = cv2.imread('test_data/test2.jpg', flags=3)
