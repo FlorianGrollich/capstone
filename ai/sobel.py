@@ -16,5 +16,3 @@ def sobel(image):
 
     return binary_image
 
-i = cv2.imread('test2.jpg', flags=3)
-print(sobel(i).shape)
