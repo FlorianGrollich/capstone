@@ -7,7 +7,7 @@ from img_show import show
 from sobel import sobel
 import cv2
 
-i = cv2.imread('test2.jpg', flags=3)
+i = cv2.imread('test_data/test2.jpg', flags=3)
 i1 = sobel(i)
 i2 = color_removal(i)
 
