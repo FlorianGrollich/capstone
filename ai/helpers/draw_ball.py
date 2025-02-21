@@ -9,3 +9,7 @@ def draw_ball(ball, img):
     cv2.putText(img, 'Ball', (center[0], center[1] - 10),
                 cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
     return img
+
+
+
+

@@ -5,8 +5,8 @@ def color_removal(i):
     b, g, r = i[..., 0], i[..., 1], i[..., 2]
 
     # Define masks
-    mask1 = (b > g) & (r < b)  # Regions to set to black
-    mask2 = (b < r) | (b < g)  # Regions to set to white
+    mask1 = (b < g) & (r < g)  # Regions to set to black
+    mask2 = (g < r) | (b > g)  # Regions to set to white
 
     # Initialize binary image as white (255)
     binary_image = np.full(b.shape, 255, dtype=np.uint8)

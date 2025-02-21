@@ -12,7 +12,7 @@ def detect_best_ball(img):
     # Thresholds (adjust based on your dataset)
     min_area = 20  # Minimum area of the ball in pixels
     max_area = 500  # Maximum area of the ball in pixels
-    min_circularity = 0.7  # Circularity threshold (1 = perfect circle)
+    min_circularity = 0.1  # Circularity threshold (1 = perfect circle)
 
     for contour in contours:
         # Calculate area and perimeter
