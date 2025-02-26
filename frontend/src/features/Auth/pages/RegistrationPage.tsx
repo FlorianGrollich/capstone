@@ -3,7 +3,7 @@ import * as React from "react";
 const RegistrationPage: React.FC = () => {
 
     return (
-        <div>
+        <div className={"bg-primary"}>
             Registration
         </div>
     );
