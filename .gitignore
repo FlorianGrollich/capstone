@@ -4,3 +4,4 @@ frontend/build
 frontend/.env
 backend/.venv
 backend/.idea
+backend/.env
