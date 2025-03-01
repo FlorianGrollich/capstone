@@ -3,7 +3,7 @@ from motor.motor_asyncio import AsyncIOMotorCollection
 
 from app.core.database import get_mongo_collection
 from app.services.user_service import UserService
-from config import settings
+from app.core.config import settings
 
 
 def get_settings():
