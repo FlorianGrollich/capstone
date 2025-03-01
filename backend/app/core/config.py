@@ -5,10 +5,9 @@ load_dotenv()
 
 class Settings(BaseSettings):
     app_name: str = "Wrong"
+    mongo_url: str = "default url"
     model_config = SettingsConfigDict(env_file="../../.env")
 
 
 
-s = Settings()
-print(s.app_name)
-
+settings = Settings()
