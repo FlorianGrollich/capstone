@@ -4,7 +4,7 @@ import {BrowserRouter, Route, Routes} from "react-router-dom";
 import LoginPage from "./features/Auth/pages/LoginPage.tsx";
 import RegistrationPage from "./features/Auth/pages/RegistrationPage.tsx";
 import ProjectMenu from "./features/Project/pages/ProjectMenu.tsx";
-import Layout from "./components/layout.tsx";
+import Layout from "./components/Layout.tsx";
 
 const App: React.FC = () => {
 
