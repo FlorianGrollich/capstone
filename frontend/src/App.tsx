@@ -4,6 +4,7 @@ import {BrowserRouter, Route, Routes} from "react-router-dom";
 import LoginPage from "./features/Auth/pages/LoginPage.tsx";
 import RegistrationPage from "./features/Auth/pages/RegistrationPage.tsx";
 import ProjectMenu from "./features/Project/pages/ProjectMenu.tsx";
+import Layout from "./components/layout.tsx";
 
 const App: React.FC = () => {
 
@@ -11,11 +12,12 @@ const App: React.FC = () => {
 
         <BrowserRouter>
             <Routes>
-                <Route path="/" element={<LoginPage/>}/>
-                <Route path="/registration" element={<RegistrationPage/>}/>
+                <Route element={<Layout/>}>
 
-
-                <Route path="/project" element={<ProjectMenu/>}/>
+                    <Route path="/" element={<LoginPage/>}/>
+                    <Route path="/registration" element={<RegistrationPage/>}/>
+                    <Route path="/project" element={<ProjectMenu/>}/>
+                </Route>
             </Routes>
 
         </BrowserRouter>);
