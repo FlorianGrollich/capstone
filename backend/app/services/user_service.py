@@ -1,3 +1,5 @@
+from typing import Optional
+
 from fastapi import HTTPException
 from motor.motor_asyncio import AsyncIOMotorCollection
 
@@ -23,5 +25,17 @@ class UserService:
             raise HTTPException(status_code=500, detail="User was not created successfully")
 
         return UserModel(**created_user)
+
+    async def get_user_by_email(self, email: str) -> Optional[UserModel]:
+        """
+        finds user by email if no user is found return None
+        :param email:
+        :return user | None:
+        """
+        user = await self.collection.find_one({"email": email})
+
+        if user is None:
+            return None
+        return UserModel(**user)
 
 
