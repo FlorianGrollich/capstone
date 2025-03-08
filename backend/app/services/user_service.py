@@ -36,6 +36,7 @@ class UserService:
 
         if user is None:
             return None
+
         return UserModel(**user)
 
 
