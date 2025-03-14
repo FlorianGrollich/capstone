@@ -1,5 +1,7 @@
 import * as React from "react";
 import TextField from "../../../components/TextField.tsx";
+import Button from "../../../components/Button.tsx";
+import {FcGoogle} from "react-icons/fc";
 
 
 const LoginPage: React.FC = () => {
@@ -17,6 +19,9 @@ const LoginPage: React.FC = () => {
                         <span className="bg-white px-2 text-gray-500">or</span>
                     </div>
                 </div>
+
+                <Button className={"bg-white border border-gray-300 text-black w-full hover:bg-gray-100 hover:shadow-lg"}><FcGoogle
+                    className="mr-2"/>Google</Button>
 
             </div>
         </div>
