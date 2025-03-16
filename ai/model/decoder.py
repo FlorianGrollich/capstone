@@ -4,7 +4,7 @@ import torch.nn as nn
 class TrackNetV2Decoder(nn.Module):
     def __init__(self):
         super(TrackNetV2Decoder, self).__init__()
-        # Decoder layers with upsampling and skip connections
+
         self.up4 = nn.Sequential(
             nn.ConvTranspose2d(512, 256, 4, stride=2, padding=1),
             nn.ReLU()
@@ -36,7 +36,6 @@ class TrackNetV2Decoder(nn.Module):
         )
 
     def forward(self, x, skip_connections):
-        # x: (batch, 512, H/16, W/16), skip_connections: [conv1, conv2, conv3]
         x = self.up4(x)
         x = torch.cat([x, skip_connections[2]], dim=1)  # Concat with conv3
         x = self.conv_up4(x)
