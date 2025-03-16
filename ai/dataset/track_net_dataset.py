@@ -5,7 +5,7 @@ import torchvision.transforms as transforms
 from PIL import Image
 import numpy as np
 
-from dataset.utils.generate_heatmap import generate_heatmap
+from utils.generate_heatmap import generate_heatmap
 
 
 class TrackNetDataset(Dataset):
