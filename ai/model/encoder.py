@@ -1,4 +1,3 @@
-import torch
 import torch.nn as nn
 
 class TrackNetV2Encoder(nn.Module):
