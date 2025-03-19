@@ -3,20 +3,30 @@ import TextField from "../../../components/TextField.tsx";
 import Button from "../../../components/Button.tsx";
 import {FcGoogle} from "react-icons/fc";
 import {useNavigate} from "react-router-dom";
+import {selectEmail, selectPassword, setEmail, setPassword} from "../slices/loginFormState.ts";
+import {useDispatch, useSelector} from "react-redux";
+import {AppDispatch} from "../../../store.ts";
+import {login} from "../slices/token.ts";
 
 
 const LoginPage: React.FC = () => {
     const navigate = useNavigate();
+    const dispatch = useDispatch<AppDispatch>();
+    const email = useSelector(selectEmail);
+    const password = useSelector(selectPassword);
+
     return (
         <div className={"h-screen bg-gradient-to-tr from-primary to-accent flex items-center justify-center"}>
             <div className="bg-white rounded-xl p-4 w-1/3">
-                <TextField onChange={() => {
+                <TextField onChange={(value) => {
+                    dispatch(setEmail(value.target.value));
                 }} label={"Email"}/>
                 <div className="h-4"></div>
-                <TextField onChange={() => {
+                <TextField onChange={(value) => {
+                    dispatch(setPassword(value.target.value));
                 }} label={"Password"}/>
                 <div className="h-4"></div>
-                <Button className={"w-full"}>Login</Button>
+                <Button className={"w-full"} onClick={() => dispatch(login(email, password))}>Login</Button>
                 <div className={"h-2"}></div>
                 <p className={"text-xs text-gray-600"}>
                     Don't have an account?{" "}
