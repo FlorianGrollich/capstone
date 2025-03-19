@@ -26,7 +26,7 @@ const LoginPage: React.FC = () => {
                     dispatch(setPassword(value.target.value));
                 }} label={"Password"}/>
                 <div className="h-4"></div>
-                <Button className={"w-full"} onClick={() => dispatch(login(email, password))}>Login</Button>
+                <Button className={"w-full"} onClick={() => dispatch(login({email, password}))}>Login</Button>
                 <div className={"h-2"}></div>
                 <p className={"text-xs text-gray-600"}>
                     Don't have an account?{" "}
