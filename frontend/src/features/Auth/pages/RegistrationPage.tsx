@@ -3,8 +3,6 @@ import TextField from "../../../components/TextField.tsx";
 import Button from "../../../components/Button.tsx";
 import {FcGoogle} from "react-icons/fc";
 import {useNavigate} from "react-router-dom";
-import {FaRegCircleCheck, FaRegCircleXmark} from "react-icons/fa6";
-import {IconContext} from "react-icons";
 
 
 const RegistrationPage: React.FC = () => {
