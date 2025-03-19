@@ -1,9 +1,11 @@
-import { configureStore } from '@reduxjs/toolkit';
-import authReducer from './features/Auth/slices/loginFormState.ts';
+import {configureStore} from '@reduxjs/toolkit';
+import loginFormReducer from './features/Auth/slices/loginFormState';
+import tokenReducer from './features/Auth/slices/token';
 
 const store = configureStore({
     reducer: {
-        auth: authReducer,
+        loginForm: loginFormReducer,
+        token: tokenReducer,
     },
 });
 
