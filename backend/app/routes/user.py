@@ -12,4 +12,4 @@ router = APIRouter()
 async def create_user(
         user: UserModel,
         user_service: UserService = Depends(get_user_service)):
-    return await user_service.create_user(user)
+    return await user_service.register(user)
