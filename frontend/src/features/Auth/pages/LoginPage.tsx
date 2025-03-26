@@ -44,8 +44,6 @@ const LoginPage: React.FC = () => {
                 <button
                     className={"px-4 py-2 rounded-lg font-medium transition duration-300 flex items-center justify-center bg-white border-2 border-gray-300 text-black w-full hover:border-primary  hover:shadow-lg"}>
                     <FcGoogle/></button>
-
-
             </div>
         </div>
     );
