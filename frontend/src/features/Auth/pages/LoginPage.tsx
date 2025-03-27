@@ -6,7 +6,7 @@ import {useNavigate} from "react-router-dom";
 import {selectEmail, selectPassword, setEmail, setPassword} from "../slices/loginFormState.ts";
 import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch} from "../../../store.ts";
-import {login} from "../slices/token.ts";
+import {login} from "../slices/authState.ts";
 
 
 const LoginPage: React.FC = () => {
