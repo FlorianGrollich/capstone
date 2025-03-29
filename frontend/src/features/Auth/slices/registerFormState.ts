@@ -1,4 +1,5 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+import {RootState} from "../../../store.ts";
 
 interface RegisterFormState {
     email: string;
@@ -28,6 +29,8 @@ const registerFormSlice = createSlice({
     },
 });
 
+export const selectEmail = (state: RootState) => state.registerForm.email;
+export const selectPassword = (state: RootState) => state.registerForm.password;
 
-export const { setEmail, setPassword, setRepeatPassword } = registerFormSlice.actions;
+export const {setEmail, setPassword, setRepeatPassword} = registerFormSlice.actions;
 export default registerFormSlice.reducer;

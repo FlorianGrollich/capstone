@@ -8,6 +8,8 @@ import Layout from "./components/Layout.tsx";
 import {Provider} from "react-redux";
 import store from "./store.ts";
 import AnalysisPage from "./features/Analysis/AnalysisPage.tsx";
+import FileUploadPage from "./features/Analysis/FileUploadPage.tsx";
+
 
 const App: React.FC = () => {
 
@@ -18,7 +20,7 @@ const App: React.FC = () => {
                     <Route path="/login" element={<LoginPage/>}/>
                     <Route path="/register" element={<RegistrationPage/>}/>
                     <Route element={<Layout/>}>
-                        <Route path="/" element={<ProjectMenu/>}/>
+                        <Route path="/" element={<FileUploadPage/>}/>
                         <Route path="/analysis" element={<AnalysisPage/>}/>
                         <Route path="/project" element={<ProjectMenu/>}/>
                     </Route>

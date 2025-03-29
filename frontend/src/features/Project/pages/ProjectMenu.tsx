@@ -7,7 +7,7 @@ const ProjectMenu: React.FC = () => {
         <div className={""}>
             <CreateProjectButton/>
         </div>
-    )
-}
+    );
+};
 
 export default ProjectMenu;

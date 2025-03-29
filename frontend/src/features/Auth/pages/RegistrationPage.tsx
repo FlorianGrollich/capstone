@@ -3,13 +3,17 @@ import TextField from "../../../components/TextField.tsx";
 import Button from "../../../components/Button.tsx";
 import {FcGoogle} from "react-icons/fc";
 import {useNavigate} from "react-router-dom";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch} from "../../../store.ts";
 import {setEmail, setPassword, setRepeatPassword} from "../slices/registerFormState.ts";
+import {register} from "../slices/authState.ts";
+import {selectEmail, selectPassword} from "../slices/registerFormState.ts";
 
 const RegistrationPage: React.FC = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch<AppDispatch>();
+    const email = useSelector(selectEmail);
+    const password = useSelector(selectPassword);
 
     return (
         <div className={"h-screen bg-gradient-to-tr from-primary to-accent flex items-center justify-center"}>
@@ -27,7 +31,9 @@ const RegistrationPage: React.FC = () => {
                 }} label={"Repeat Password"}/>
 
                 <div className="h-4"></div>
-                <Button className={"w-full"}>Register</Button>
+                <Button className={"w-full"} onClick={() =>
+                    dispatch(register({email: email, password: password}))
+                }>Register</Button>
                 <div className={"h-2"}></div>
                 <p className={"text-xs text-gray-600"}>
                     Already have an account?{" "}

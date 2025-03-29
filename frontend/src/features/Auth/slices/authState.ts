@@ -18,8 +18,8 @@ export const login = createAsyncThunk(
     'auth/login',
     async ({email, password}: { email: string; password: string }, {rejectWithValue}) => {
         try {
-            const response = await axios.post('/api/login', {email, password});
-            return response.data.token;
+            const response = await axios.post('http://127.0.0.1:8000/login', {email, password});
+            return response.data;
         } catch (error) {
             const e = error as AxiosError;
             return rejectWithValue(e);
@@ -32,9 +32,13 @@ export const register = createAsyncThunk(
     'auth/register',
     async ({email, password}: { email: string; password: string }, {rejectWithValue}) => {
         try {
-            const response = await axios.post('/api/register', {email, password});
-            return response.data.token;
+            const response = await axios.post('http://127.0.0.1:8000/register', {email, password});
+            console.log(response.data);
+            console.log(11);
+            return response.data;
+
         } catch (error) {
+            console.log("Error creating register: ", error);
             return rejectWithValue(error ?? 'An unknown error occurred');
         }
     }
@@ -68,8 +72,10 @@ const authSlice = createSlice({
                 state.error = null;
             })
             .addCase(register.fulfilled, (state, action: PayloadAction<string>) => {
+                console.log(22222)
                 state.loading = false;
                 state.token = action.payload;
+                console.log("set token", action.payload);
                 localStorage.setItem('token', action.payload);
             })
             .addCase(register.rejected, (state) => {
@@ -78,6 +84,8 @@ const authSlice = createSlice({
             });
     },
 });
+
+export const selectToken = (state: AuthState) => state.token;
 
 export const {logout} = authSlice.actions;
 export default authSlice.reducer;
