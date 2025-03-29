@@ -1,10 +1,12 @@
 import React from "react";
-import {useDispatch} from "react-redux";
-import {setFile} from "./slices/fileUploadSlice.ts";
+import {useDispatch, useSelector} from "react-redux";
+import {selectFile, setFile, uploadFile} from "./slices/fileUploadSlice.ts";
 import Button from "../../components/Button.tsx";
+import {AppDispatch} from "../../store.ts";
 
 const FileUploadPage: React.FC = () => {
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>();
+    const file = useSelector(selectFile);
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files ? event.target.files[0] : null;
@@ -22,7 +24,9 @@ const FileUploadPage: React.FC = () => {
             </div>
             <Button
                 className={"mt-4"}
+                disabled={!file}
                 onClick={() => {
+                    dispatch(uploadFile(file!));
                 }}>Upload</Button>
         </div>
     );
