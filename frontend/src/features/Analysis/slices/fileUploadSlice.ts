@@ -9,8 +9,9 @@ export const uploadFile = createAsyncThunk(
     async (file: File) => {
         const formData = new FormData();
         formData.append('file', file);
+        console.log("upoad file");
 
-        const response = await axios.post('/api/upload', formData, {
+        const response = await axios.post('/upload', formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },

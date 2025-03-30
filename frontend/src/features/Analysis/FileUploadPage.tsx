@@ -24,7 +24,7 @@ const FileUploadPage: React.FC = () => {
             </div>
             <Button
                 className={"mt-4"}
-                disabled={!file}
+
                 onClick={() => {
                     dispatch(uploadFile(file!));
                 }}>Upload</Button>

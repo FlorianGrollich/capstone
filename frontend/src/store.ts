@@ -7,6 +7,13 @@ const store = configureStore({
         loginForm: loginFormReducer,
         registerForm: registerFormReducer,
     },
+    middleware: (getDefaultMiddleware) =>
+        getDefaultMiddleware({
+            serializableCheck: {
+                ignoredActions: ['fileUpload/setFile'],
+                ignoredPaths: ['fileUpload.selectedFile'],
+            },
+        }),
 });
 
 export type RootState = ReturnType<typeof store.getState>;
