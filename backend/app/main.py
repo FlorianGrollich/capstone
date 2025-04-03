@@ -6,7 +6,7 @@ from app.routes import user, video
 app = FastAPI()
 
 origins = [
-    "http://localhost:5174",  # Common Vite/React development port
+    "*",  # Common Vite/React development port
 ]
 
 app.add_middleware(
