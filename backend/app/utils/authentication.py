@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from typing import Any
 
 import jwt
 
@@ -25,3 +26,11 @@ def create_jwt(user: UserModel):
     to_encode.exp = expire
     encoded_jwt = jwt.encode(to_encode.model_dump(), settings.jwt_secret_key, algorithm=settings.jwt_algo)
     return encoded_jwt
+
+
+def decode_jwt(token: str) -> dict | None:
+    try:
+        payload = jwt.decode(token, settings.jwt_secret_key, algorithms=[settings.jwt_algo])
+        return payload
+    except jwt.PyJWTError:
+        return None
