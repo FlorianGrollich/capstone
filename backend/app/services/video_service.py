@@ -2,9 +2,13 @@ import httpx
 import json
 
 from fastapi import HTTPException
+from motor.motor_asyncio import AsyncIOMotorCollection
 
 
 class VideoService:
+
+    def __init__(self, user_collection: AsyncIOMotorCollection):
+        self.user_collection = user_collection
 
     async def upload_video(self, account_id: str, api_key: str, request_body: bytes, metadata: dict | None = None,
                            querystring: dict | None = None):
@@ -33,6 +37,12 @@ class VideoService:
                     content=request_body
                 )
                 response.raise_for_status()
+
+                fileUrl = response.json()["fileUrl"]
+                print(fileUrl)
+                self.user_collection.update_one({""})
+
+
                 return response.json()
             except httpx.RequestError as exc:
                 raise HTTPException(status_code=503, detail=f"Error connecting to upload service: {type(exc).__name__}")
