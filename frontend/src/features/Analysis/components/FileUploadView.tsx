@@ -1,8 +1,7 @@
 import React, {ChangeEvent, DragEvent} from 'react';
-import Button from '../../components/Button'; // Adjust path
+import Button from '../../../components/Button.tsx';
 import {FiUploadCloud, FiCheckCircle, FiAlertCircle, FiX, FiLoader, FiVideo} from 'react-icons/fi';
 
-// Define the props the view component expects
 interface FileUploadViewProps {
     selectedFile: File | null;
     isDraggingOver: boolean;
@@ -43,11 +42,8 @@ export const FileUploadView: React.FC<FileUploadViewProps> = ({
     const isSuccess = uploadStatus === 'succeeded';
     const isFailed = uploadStatus === 'failed';
 
-    // --- Render Logic (Copied and adapted from previous version) ---
     const renderDropzoneContent = () => {
-        // ... (Keep the exact same rendering logic from the previous good version)
-        // Replace state variable checks (e.g., `isLoading`) with prop checks
-        // Replace handler calls (e.g., `handleClearSelection`) with prop calls (e.g., `onClearSelectionClick`)
+
 
         if (isLoading) {
             return (
@@ -104,7 +100,6 @@ export const FileUploadView: React.FC<FileUploadViewProps> = ({
             );
         }
 
-        // Default / Idle state / Dragging Over state
         const idleText = isDraggingOver ? "Drop the video file here!" : "Click or drag video file here";
         const idleIconColor = isDraggingOver ? "text-primary" : "text-gray-400";
 
@@ -119,20 +114,17 @@ export const FileUploadView: React.FC<FileUploadViewProps> = ({
 
     };
 
-    // Define base classes for the dropzone label - strictly light theme
     const dropzoneBaseClasses = `
         relative flex flex-col items-center justify-center w-full h-64 px-4
         border-2 border-dashed rounded-lg cursor-pointer transition-colors duration-200 ease-in-out
         bg-white
     `;
 
-    // Define state-specific classes - strictly light theme
     const getDropzoneStateClasses = () => {
-        if (isDraggingOver) return 'border-primary bg-green-50 scale-105'; // Highlight border, light green bg, slight scale up
+        if (isDraggingOver) return 'border-primary bg-green-50 scale-105';
         if (isLoading) return 'border-gray-300 opacity-70';
-        if (isSuccess) return 'border-primary bg-green-50'; // Use primary border, light green bg
-        if (isFailed) return 'border-red-400 bg-red-50'; // Use red border, light red bg
-        // Idle state with primary hover
+        if (isSuccess) return 'border-primary bg-green-50';
+        if (isFailed) return 'border-red-400 bg-red-50';
         return 'border-gray-300 hover:border-primary';
     };
 
@@ -142,7 +134,6 @@ export const FileUploadView: React.FC<FileUploadViewProps> = ({
             <label
                 htmlFor="file-upload"
                 className={`${dropzoneBaseClasses} ${getDropzoneStateClasses()}`}
-                // Add Drag and Drop Handlers from props
                 onDragEnter={onDragEnter}
                 onDragLeave={onDragLeave}
                 onDragOver={onDragOver}
@@ -152,18 +143,17 @@ export const FileUploadView: React.FC<FileUploadViewProps> = ({
             >
                 {renderDropzoneContent()}
                 <input
-                    ref={fileInputRef} // Pass ref from props
+                    ref={fileInputRef}
                     id="file-upload"
                     name="file-upload"
                     type="file"
                     accept="video/*"
-                    onChange={onFileChange} // Use prop handler
+                    onChange={onFileChange}
                     disabled={isLoading}
                     className="sr-only"
                 />
             </label>
 
-            {/* Progress Bar */}
             {isLoading && (
                 <div className="w-full bg-gray-200 rounded-full h-2.5 mt-5 overflow-hidden">
                     <div
@@ -173,11 +163,10 @@ export const FileUploadView: React.FC<FileUploadViewProps> = ({
                 </div>
             )}
 
-            {/* Action Buttons */}
             <div className="flex justify-center items-center space-x-4 mt-6 min-h-[50px]">
                 {!isLoading && !isSuccess && !isFailed && selectedFile && (
                     <Button
-                        onClick={onUploadClick} // Use prop handler
+                        onClick={onUploadClick}
                         disabled={isLoading}
                     >
                         <FiUploadCloud className="mr-2 h-5 w-5"/>
@@ -186,7 +175,7 @@ export const FileUploadView: React.FC<FileUploadViewProps> = ({
                 )}
                 {isLoading && (
                     <Button
-                        onClick={onCancelClick} // Use prop handler
+                        onClick={onCancelClick}
                         className="bg-red-600 hover:bg-red-700 text-white"
                     >
                         <FiX className="mr-2 h-5 w-5"/>

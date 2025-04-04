@@ -1,55 +1,144 @@
-import {createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {createSlice, createAsyncThunk, PayloadAction} from '@reduxjs/toolkit';
+import axios, {AxiosProgressEvent, CancelTokenSource, isCancel, isAxiosError} from 'axios';
+import {RootState} from '../../../store';
 
 
-import {createAsyncThunk} from '@reduxjs/toolkit';
-import axios from 'axios';
+interface UploadResponse {
+    message: string;
+    fileUrl?: string;
+}
 
-export const uploadFile = createAsyncThunk(
-    'fileUpload/uploadFile',
-    async (file: File) => {
-        const formData = new FormData();
-        formData.append('file', file);
-        console.log("upoad file");
-
-        const response = await axios.post('/upload', formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            },
-        });
-
-        return response.data;
-    }
-);
-
+interface UploadFilePayload {
+    file: File;
+    cancelTokenSource?: CancelTokenSource;
+}
 
 interface FileUploadState {
-    selectedFile: File | null;
+    uploadStatus: 'idle' | 'loading' | 'succeeded' | 'failed';
     uploadProgress: number;
+    error: string | null;
+    uploadedFileUrl: string | null;
 }
 
 const initialState: FileUploadState = {
-    selectedFile: null,
+    uploadStatus: 'idle',
     uploadProgress: 0,
+    error: null,
+    uploadedFileUrl: null,
 };
+
+const setUploadProgress = (state: FileUploadState, action: PayloadAction<number>) => {
+    state.uploadProgress = action.payload;
+};
+
+export const uploadFile = createAsyncThunk<
+    UploadResponse,
+    UploadFilePayload,
+    {
+        state: RootState;
+        rejectValue: string;
+    }
+>(
+    'fileUpload/uploadFile',
+    async ({file, cancelTokenSource}, thunkAPI) => {
+        const formData = new FormData();
+        formData.append('file', file, file.name);
+
+        console.log("Starting upload for:", file.name);
+
+        thunkAPI.dispatch(fileUploadSlice.actions.setUploadProgress(0));
+
+        try {
+            const response = await axios.post<UploadResponse>(
+                'http://127.0.0.1:8000/upload', // Your API endpoint
+                formData,
+                {
+                    onUploadProgress: (progressEvent: AxiosProgressEvent) => {
+                        if (progressEvent.total) {
+                            const percentCompleted = Math.round(
+                                (progressEvent.loaded * 100) / progressEvent.total
+                            );
+                            thunkAPI.dispatch(fileUploadSlice.actions.setUploadProgress(percentCompleted));
+                            console.log(`Upload Progress: ${percentCompleted}%`);
+                        }
+                    },
+                    cancelToken: cancelTokenSource?.token,
+                }
+            );
+
+            console.log('Upload successful:', response.data);
+            return response.data;
+
+        } catch (error: unknown) {
+            let errorMessage = 'File upload failed.';
+
+            if (isCancel(error)) {
+                errorMessage = 'Upload cancelled.';
+                console.log('Request canceled:', (error as { message: string }).message);
+            } else if (isAxiosError(error)) {
+                console.error('Axios Error Code:', error.code); // e.g. 'ERR_NETWORK'
+                if (error.response) {
+                    console.error('Server Error Status:', error.response.status);
+                    console.error('Server Error Data:', error.response.data);
+                    const serverMessage = (error.response.data as { message?: string })?.message;
+                    errorMessage = serverMessage || `Server error: ${error.response.status}`;
+                } else if (error.request) {
+                    console.error('Network Error:', error.request);
+                    errorMessage = 'Network error. Please check connection.';
+                } else {
+                    console.error('Axios Setup Error:', error.message);
+                    errorMessage = error.message || 'Error setting up upload request.';
+                }
+            } else if (error instanceof Error) {
+                console.error('Generic Error:', error.message);
+                errorMessage = error.message;
+            } else {
+                console.error('Unknown Error Type:', error);
+                errorMessage = 'An unexpected error occurred.';
+            }
+
+            return thunkAPI.rejectWithValue(errorMessage);
+        }
+    }
+);
 
 const fileUploadSlice = createSlice({
     name: 'fileUpload',
     initialState,
     reducers: {
-        setFile: (state, action: PayloadAction<File | null>) => {
-            state.selectedFile = action.payload;
-        }
+        setUploadProgress,
+        resetUploadState: (state) => {
+            state.uploadStatus = 'idle';
+            state.uploadProgress = 0;
+            state.error = null;
+            state.uploadedFileUrl = null;
+        },
     },
     extraReducers: (builder) => {
-        builder.addCase(uploadFile.fulfilled, (state) => {
-            state.uploadProgress = 100;
-        });
+        builder
+            .addCase(uploadFile.pending, (state) => {
+                state.uploadStatus = 'loading';
+                state.error = null;
+                state.uploadedFileUrl = null;
+            })
+            .addCase(uploadFile.fulfilled, (state, action: PayloadAction<UploadResponse>) => {
+                state.uploadStatus = 'succeeded';
+                state.uploadProgress = 100;
+                state.uploadedFileUrl = action.payload.fileUrl ?? null;
+                state.error = null;
+            })
+            .addCase(uploadFile.rejected, (state, action) => {
+                state.uploadStatus = 'failed';
+                state.error = typeof action.payload === 'string' ? action.payload : (action.error.message ?? 'Upload failed');
+            });
     },
 });
 
+// --- Selectors ---
+export const selectFileUploadState = (state: RootState) => state.fileUpload;
 
-export const selectFile = (state: FileUploadState) => state.selectedFile;
+// --- Export Actions ---
+export const {resetUploadState} = fileUploadSlice.actions;
 
-
-export const {setFile} = fileUploadSlice.actions;
+// --- Export Reducer ---
 export default fileUploadSlice.reducer;

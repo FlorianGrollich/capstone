@@ -51,6 +51,4 @@ class TrackNetV4(nn.Module):
         fused_features[:, 1, :, :] = visual_features[:, 1, :, :] * motion_maps[:, 0, :, :]  # Second frame
         fused_features[:, 2, :, :] = visual_features[:, 2, :, :] * motion_maps[:, 1, :, :]  # Third frame
 
-        # Step 4: Apply Sigmoid to get heatmaps
-        heatmaps = torch.sigmoid(fused_features)  # (batch, 3, H, W)
-        return heatmaps
+        return fused_features
