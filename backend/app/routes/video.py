@@ -3,7 +3,7 @@ from fastapi.params import Depends
 from fastapi.responses import JSONResponse
 
 from app.core.config import settings
-from app.core.depedencies import get_video_service
+from app.core.depedencies import get_video_service, get_current_user
 from app.services.video_service import VideoService
 
 router = APIRouter()
@@ -11,7 +11,8 @@ router = APIRouter()
 
 @router.post("/upload")
 async def upload_video_file(file: UploadFile = File(...),
-                            video_service: VideoService = Depends(get_video_service)
+                            video_service: VideoService = Depends(get_video_service),
+                            user_payload: dict = Depends(get_current_user)
                             ):
     if not settings.bytescale_api_key or not settings.bytescale_account_id:
         raise HTTPException(status_code=500, detail="Server configuration error: Upload service credentials not set.")
@@ -29,9 +30,12 @@ async def upload_video_file(file: UploadFile = File(...),
             "fileName": file.filename
         }
 
+        user_email = user_payload.get("email")
+
         response_data = await video_service.upload_video(
             account_id=settings.bytescale_account_id,
             api_key=settings.bytescale_api_key,
+            user_email=user_email,
             request_body=file_content,
             metadata=upload_metadata,
             querystring=upload_querystring

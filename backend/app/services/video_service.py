@@ -10,7 +10,11 @@ class VideoService:
     def __init__(self, user_collection: AsyncIOMotorCollection):
         self.user_collection = user_collection
 
-    async def upload_video(self, account_id: str, api_key: str, request_body: bytes, metadata: dict | None = None,
+    async def upload_video(self,
+                           account_id: str,
+                           user_email: str,
+                           api_key: str, request_body: bytes,
+                           metadata: dict | None = None,
                            querystring: dict | None = None):
         base_url = "https://api.bytescale.com"
         path = f"/v2/accounts/{account_id}/uploads/binary"
@@ -38,10 +42,12 @@ class VideoService:
                 )
                 response.raise_for_status()
 
-                fileUrl = response.json()["fileUrl"]
-                print(fileUrl)
-                self.user_collection.update_one({""})
-
+                file_url = response.json()["fileUrl"]
+                print(file_url)
+                print(user_email)
+                await self.user_collection.update_one(
+                    {"email": user_email},
+                    {"$push": {"video_urls": file_url}})
 
                 return response.json()
             except httpx.RequestError as exc:
