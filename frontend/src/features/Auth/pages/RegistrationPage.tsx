@@ -8,6 +8,7 @@ import {AppDispatch} from "../../../store.ts";
 import {setEmail, setPassword, setRepeatPassword} from "../slices/registerFormState.ts";
 import {register} from "../slices/authState.ts";
 import {selectEmail, selectPassword} from "../slices/registerFormState.ts";
+import Redirect from "../components/redirect.tsx";
 
 const RegistrationPage: React.FC = () => {
     const navigate = useNavigate();
@@ -17,6 +18,7 @@ const RegistrationPage: React.FC = () => {
 
     return (
         <div className={"h-screen bg-gradient-to-tr from-primary to-accent flex items-center justify-center"}>
+            <Redirect/>
             <div className="bg-white rounded-xl p-4 w-1/3">
                 <TextField onChange={(value) => {
                     dispatch(setEmail(value.target.value));

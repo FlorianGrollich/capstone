@@ -13,7 +13,6 @@ const initialState: AuthState = {
     error: null,
 };
 
-// Async thunk for login
 export const login = createAsyncThunk(
     'auth/login',
     async ({email, password}: { email: string; password: string }, {rejectWithValue}) => {
@@ -27,14 +26,11 @@ export const login = createAsyncThunk(
     }
 );
 
-// Async thunk for registration
 export const register = createAsyncThunk(
     'auth/register',
     async ({email, password}: { email: string; password: string }, {rejectWithValue}) => {
         try {
             const response = await axios.post('http://127.0.0.1:8000/register', {email, password});
-            console.log(response.data);
-            console.log(11);
             return response.data;
 
         } catch (error) {

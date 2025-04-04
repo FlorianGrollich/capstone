@@ -11,7 +11,7 @@ const Auth: React.FC = () => {
         if (token == null) {
             navigate("/login");
         }
-    }, []);
+    }, [navigate, token]);
 
     return (
         <div>
