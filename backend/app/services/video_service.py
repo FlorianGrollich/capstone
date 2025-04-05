@@ -4,6 +4,8 @@ import json
 from fastapi import HTTPException
 from motor.motor_asyncio import AsyncIOMotorCollection
 
+from app.schemas.project import Project, ProjectState
+
 
 class VideoService:
 
@@ -65,3 +67,16 @@ class VideoService:
                 raise HTTPException(status_code=exc.response.status_code, detail=error_detail)
             except ValueError as ve:
                 raise HTTPException(status_code=400, detail=str(ve))
+
+    async def get_projects(self, user_email):
+        return [
+            Project(video_url="https://upcdn.io/.../annotated_video(1)(1)(1).mp4",
+                    title="Test title",
+                    state=ProjectState.FINISHED),
+            Project(video_url="https://upcdn.io/.../annotated_video(1)(1)(1).mp4",
+                    title="Test title",
+                    state=ProjectState.FINISHED),
+            Project(video_url="https://upcdn.io/.../annotated_video(1)(1)(1).mp4",
+                    title="Test title",
+                    state=ProjectState.FINISHED),
+        ]

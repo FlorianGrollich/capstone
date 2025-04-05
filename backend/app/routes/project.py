@@ -1,9 +1,12 @@
+from typing import List
+
 from fastapi import APIRouter, File, UploadFile, HTTPException
 from fastapi.params import Depends
 from fastapi.responses import JSONResponse
 
 from app.core.config import settings
 from app.core.depedencies import get_video_service, get_current_user
+from app.schemas.project import Project
 from app.services.video_service import VideoService
 
 router = APIRouter()
@@ -49,3 +52,12 @@ async def upload_video_file(file: UploadFile = File(...),
         import traceback
         traceback.print_exc()
         raise HTTPException(status_code=500, detail="An internal server error occurred during file processing.")
+
+
+@router.get("/projects")
+async def get_projects(
+        user_payload: dict = Depends(get_current_user),
+        video_service: VideoService = Depends(get_video_service)) -> List[Project]:
+    user_email = user_payload.get("email")
+    projects = await video_service.get_projects(user_email)
+    return projects
