@@ -1,6 +1,7 @@
 import {createSlice, createAsyncThunk, PayloadAction} from '@reduxjs/toolkit';
-import axios, {AxiosProgressEvent, CancelTokenSource, isCancel, isAxiosError} from 'axios';
+import {AxiosProgressEvent, CancelTokenSource, isCancel, isAxiosError} from 'axios';
 import {RootState} from '../../../store';
+import axiosClient from "../../../api/axiosClient.ts";
 
 
 interface UploadResponse {
@@ -49,10 +50,13 @@ export const uploadFile = createAsyncThunk<
         thunkAPI.dispatch(fileUploadSlice.actions.setUploadProgress(0));
 
         try {
-            const response = await axios.post<UploadResponse>(
-                'http://127.0.0.1:8000/upload', // Your API endpoint
+            const response = await axiosClient.post<UploadResponse>(
+                '/upload',
                 formData,
                 {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    },
                     onUploadProgress: (progressEvent: AxiosProgressEvent) => {
                         if (progressEvent.total) {
                             const percentCompleted = Math.round(
@@ -134,11 +138,8 @@ const fileUploadSlice = createSlice({
     },
 });
 
-// --- Selectors ---
 export const selectFileUploadState = (state: RootState) => state.fileUpload;
 
-// --- Export Actions ---
 export const {resetUploadState} = fileUploadSlice.actions;
 
-// --- Export Reducer ---
 export default fileUploadSlice.reducer;
