@@ -1,23 +1,28 @@
-import { useState } from "react";
-import { Link, Outlet } from "react-router-dom";
-import {  X } from "lucide-react";
+import {useState} from "react";
+import {Link, Outlet} from "react-router-dom";
+import {X} from "lucide-react";
+import {useDispatch} from "react-redux";
+import {AppDispatch} from "../store.ts";
+import {logout} from "../features/Auth/slices/authState.ts";
 
 const Layout = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const dispatch = useDispatch<AppDispatch>();
 
     return (
         <div className="flex h-screen">
-            <div className={`fixed inset-y-0 left-0 w-64 bg-primary text-white transform ${isOpen ? "translate-x-0" : "-translate-x-full"} transition-transform duration-300 ease-in-out md:relative md:translate-x-0`}>
+            <div
+                className={`fixed inset-y-0 left-0 w-64 bg-primary text-white transform ${isOpen ? "translate-x-0" : "-translate-x-full"} transition-transform duration-300 ease-in-out md:relative md:translate-x-0`}>
                 <div className="p-4 flex justify-between items-center">
                     <h1 className="text-xl font-bold">MyApp</h1>
                     <button className="md:hidden" onClick={() => setIsOpen(false)}>
-                        <X className="h-6 w-6" />
+                        <X className="h-6 w-6"/>
                     </button>
                 </div>
                 <nav className="mt-4">
                     <Link to="/" className="block py-2 px-4 hover:bg-gray-700">Home</Link>
-                    <Link to="/about" className="block py-2 px-4 hover:bg-gray-700">About</Link>
-                    <Link to="/contact" className="block py-2 px-4 hover:bg-gray-700">Contact</Link>
+                    <Link to="/login" onClick={() => dispatch(logout())}
+                          className="block py-2 px-4 hover:bg-gray-700">Logout</Link>
                 </nav>
             </div>
 
@@ -27,7 +32,7 @@ const Layout = () => {
                     <h1 className="text-lg font-semibold">Dashboard</h1>
                 </header>
                 <main className="p-4 flex-1">
-                    <Outlet />
+                    <Outlet/>
                 </main>
             </div>
         </div>
