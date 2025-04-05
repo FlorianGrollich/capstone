@@ -24,7 +24,7 @@ const LoginPage: React.FC = () => {
                     dispatch(setEmail(value.target.value));
                 }} label={"Email"}/>
                 <div className="h-4"></div>
-                <TextField onChange={(value) => {
+                <TextField type="password" onChange={(value) => {
                     dispatch(setPassword(value.target.value));
                 }} label={"Password"}/>
                 <div className="h-4"></div>
