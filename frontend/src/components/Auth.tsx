@@ -8,7 +8,7 @@ const Auth: React.FC = () => {
 
     useEffect(() => {
         console.log("token: ", token);
-        if (token === undefined) {
+        if (token === undefined || token === null) {
             navigate("/login");
         }
     }, [navigate, token]);

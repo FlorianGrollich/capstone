@@ -9,9 +9,9 @@ const Redirect: React.FC = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        if(token !== undefined) {
+        if (token !== undefined && token !== null) {
             navigate("/");
-            
+
         }
     }, [navigate, token]);
 
