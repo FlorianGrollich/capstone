@@ -1,6 +1,6 @@
 import {useSelector} from "react-redux";
 import {selectToken} from "../slices/authState.ts";
-import {useEffect} from "react";
+import React, {useEffect} from "react";
 import {useNavigate} from "react-router-dom";
 
 const Redirect: React.FC = () => {
