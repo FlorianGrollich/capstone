@@ -1,6 +1,6 @@
 import {useSelector} from "react-redux";
 import {selectToken} from "../slices/authState.ts";
-import React, {useEffect} from "react";
+import {useEffect} from "react";
 import {useNavigate} from "react-router-dom";
 
 const Redirect: React.FC = () => {
@@ -9,8 +9,9 @@ const Redirect: React.FC = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        if(token !== null) {
+        if(token !== undefined) {
             navigate("/");
+            
         }
     }, [navigate, token]);
 

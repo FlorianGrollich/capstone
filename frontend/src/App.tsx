@@ -10,7 +10,6 @@ import store from "./store.ts";
 import AnalysisPage from "./features/Analysis/AnalysisPage.tsx";
 import FileUploadPage from "./features/Analysis/FileUploadPage.tsx";
 
-
 const App: React.FC = () => {
 
     return (
