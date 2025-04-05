@@ -30,8 +30,8 @@ const Layout = () => {
 
 
             <div className="flex-1 flex flex-col">
-                <header className="p-4 bg-gray-800 text-white flex justify-between items-center">
-                    <h1 className="text-lg font-semibold">Dashboard</h1>
+                <header className="p-4 flex justify-between items-center">
+                    <h1 className="text-3xl font-bold">Dashboard</h1>
                 </header>
                 <main className="p-4 flex-1">
                     <Outlet/>
