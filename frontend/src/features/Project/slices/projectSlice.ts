@@ -1,5 +1,6 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
-import axiosClient from '../../../api/axiosClient';
+import {RootState} from "../../../store.ts";
+import axiosClient from "../../../api/axiosClient.ts";
 
 export interface Project {
     video_url: string;
@@ -7,7 +8,7 @@ export interface Project {
     state: 'finished' | 'loading' | 'error';
 }
 
-interface ProjectsState {
+export interface ProjectsState {
     projects: Project[];
     status: 'idle' | 'loading' | 'succeeded' | 'failed';
     error: string | null;
@@ -50,5 +51,7 @@ const projectsSlice = createSlice({
             });
     }
 });
+
+export const selectProject = (state: RootState) => state.project;
 
 export default projectsSlice.reducer;

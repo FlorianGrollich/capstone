@@ -1,6 +1,4 @@
 import axios, { AxiosInstance, InternalAxiosRequestConfig, AxiosResponse } from 'axios';
-import store from '../store';
-import {logout, selectToken} from '../features/Auth/slices/authState';
 
 const API_URL = 'http://localhost:8000';
 
@@ -9,7 +7,7 @@ const axiosClient: AxiosInstance = axios.create({
 });
 
 axiosClient.interceptors.request.use((config: InternalAxiosRequestConfig) => {
-  const token = selectToken(store.getState().authState);
+  const token = localStorage.getItem('token');
 
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
@@ -27,7 +25,7 @@ axiosClient.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
       console.log('Unauthorized, redirecting to login');
-      store.dispatch(logout());
+      localStorage.removeItem('token');
     }
 
     return Promise.reject(error);

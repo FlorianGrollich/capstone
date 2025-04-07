@@ -3,6 +3,8 @@ import loginFormReducer from './features/Auth/slices/loginFormState';
 import registerFormReducer from './features/Auth/slices/registerFormState';
 import authReducer from './features/Auth/slices/authState';
 import fileUploadReducer from './features/Analysis/slices/fileUploadSlice';
+import projectReducer from './features/Project/slices/projectSlice'
+
 
 const store = configureStore({
     reducer: {
@@ -10,6 +12,7 @@ const store = configureStore({
         registerForm: registerFormReducer,
         fileUpload: fileUploadReducer,
         authState: authReducer,
+        project: projectReducer,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({
