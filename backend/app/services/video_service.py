@@ -75,8 +75,8 @@ class VideoService:
                     state=ProjectState.FINISHED),
             Project(video_url="https://upcdn.io/.../annotated_video(1)(1)(1).mp4",
                     title="Test title",
-                    state=ProjectState.FINISHED),
+                    state=ProjectState.LOADING),
             Project(video_url="https://upcdn.io/.../annotated_video(1)(1)(1).mp4",
                     title="Test title",
-                    state=ProjectState.FINISHED),
+                    state=ProjectState.ERROR),
         ]

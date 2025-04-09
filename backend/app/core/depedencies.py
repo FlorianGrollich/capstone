@@ -17,6 +17,9 @@ def get_settings():
 def get_user_collection() -> AsyncIOMotorCollection:
     return get_mongo_collection("user")
 
+def get_video_collection() -> AsyncIOMotorCollection:
+    return get_mongo_collection("video")
+
 
 def get_user_service(user_collection: AsyncIOMotorCollection = Depends(get_user_collection)) -> UserService:
     return UserService(user_collection)
