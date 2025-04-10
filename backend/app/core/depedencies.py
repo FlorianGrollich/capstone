@@ -17,6 +17,7 @@ def get_settings():
 def get_user_collection() -> AsyncIOMotorCollection:
     return get_mongo_collection("user")
 
+
 def get_video_collection() -> AsyncIOMotorCollection:
     return get_mongo_collection("video")
 
@@ -25,8 +26,8 @@ def get_user_service(user_collection: AsyncIOMotorCollection = Depends(get_user_
     return UserService(user_collection)
 
 
-def get_video_service(user_collection: AsyncIOMotorCollection = Depends(get_user_collection)) -> VideoService:
-    return VideoService(user_collection)
+def get_video_service(video_collection: AsyncIOMotorCollection = Depends(get_video_collection)) -> VideoService:
+    return VideoService(video_collection)
 
 
 security = HTTPBearer()

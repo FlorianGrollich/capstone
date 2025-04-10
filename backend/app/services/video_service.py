@@ -9,8 +9,8 @@ from app.schemas.project import Project, ProjectState
 
 class VideoService:
 
-    def __init__(self, user_collection: AsyncIOMotorCollection):
-        self.user_collection = user_collection
+    def __init__(self, video_collection: AsyncIOMotorCollection):
+        self.video_collection = video_collection
 
     async def upload_video(self,
                            account_id: str,
@@ -47,9 +47,10 @@ class VideoService:
                 file_url = response.json()["fileUrl"]
                 print(file_url)
                 print(user_email)
-                await self.user_collection.update_one(
-                    {"email": user_email},
-                    {"$push": {"video_urls": file_url}})
+                await self.video_collection.insert_one({
+                    "email": [user_email],
+                    "file_url": file_url
+                })
 
                 return response.json()
             except httpx.RequestError as exc:
