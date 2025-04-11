@@ -81,3 +81,100 @@ class VideoService:
                     title="Test title",
                     state=ProjectState.ERROR),
         ]
+
+    async def get_video_stats(self, id, user_email):
+        return {
+            "video_url": "https://upcdn.io/.../annotated_video(1)(1)(1).mp4",
+            "stats": {
+                "850": {
+                    "POSSESSION": {
+                        "team1": 33,
+                        "team2": 67
+                    },
+                    "PASS": {
+                        "team1": 6,
+                        "team2": 3
+                    }
+                },
+                "2300": {
+                    "POSSESSION": {
+                        "team1": 36,
+                        "team2": 64
+                    },
+                    "PASS": {
+                        "team1": 9,
+                        "team2": 4
+                    }
+                },
+                "3870": {
+                    "POSSESSION": {
+                        "team1": 40,
+                        "team2": 60
+                    },
+                    "PASS": {
+                        "team1": 11,
+                        "team2": 6
+                    }
+                },
+                "4890": {
+                    "PASS": {
+                        "team1": 13,
+                        "team2": 9
+                    }
+                },
+                "5630": {
+                    "POSSESSION": {
+                        "team1": 43,
+                        "team2": 57
+                    }
+                },
+                "6420": {
+                    "PASS": {
+                        "team1": 15
+                    }
+                },
+                "7150": {
+                    "PASS": {
+                        "team2": 11
+                    }
+                },
+                "8030": {
+                    "POSSESSION": {
+                        "team1": 46,
+                        "team2": 54
+                    },
+                    "PASS": {
+                        "team1": 16
+                    }
+                },
+                "9020": {
+                    "POSSESSION": {
+                        "team1": 48,
+                        "team2": 52
+                    },
+                    "PASS": {
+                        "team2": 13
+                    }
+                },
+                "10010": {
+                    "PASS": {
+                        "team1": 18,
+                        "team2": 14
+                    }
+                },
+                "11250": {
+                    "POSSESSION": {
+                        "team1": 50,
+                        "team2": 50
+                    },
+                    "PASS": {
+                        "team1": 20
+                    }
+                },
+                "12680": {
+                    "PASS": {
+                        "team2": 16
+                    }
+                }
+            }
+        }

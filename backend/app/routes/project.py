@@ -61,3 +61,15 @@ async def get_projects(
     user_email = user_payload.get("email")
     projects = await video_service.get_projects(user_email)
     return projects
+
+
+@router.get("/project/{id}")
+async def get_project_by_id(
+        id: str,
+        user_payload: dict = Depends(get_current_user),
+        video_service: VideoService = Depends(get_video_service)):
+    user_email = user_payload.get("email")
+    project = await video_service.get_video_stats(id, user_email)
+    if not project:
+        raise HTTPException(status_code=404, detail="Project not found")
+    return project
