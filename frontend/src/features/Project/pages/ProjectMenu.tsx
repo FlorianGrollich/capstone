@@ -16,10 +16,7 @@ const ProjectMenu: React.FC = () => {
 
     return (
         <div className="p-6">
-            <div className="flex justify-between items-center mb-6">
-                <h1 className="text-2xl font-bold text-gray-800">My Projects</h1>
-                <CreateProjectButton/>
-            </div>
+            <h1 className="text-2xl font-bold text-gray-800 mb-6">My Projects</h1>
 
             {status === 'loading' && (
                 <div className="text-center py-10">
@@ -41,19 +38,21 @@ const ProjectMenu: React.FC = () => {
             )}
 
             {status === 'succeeded' && (
-                <>
-                    {projects.length === 0 ? (
-                        <div className="text-center py-10">
-                            <p className="text-gray-600">No projects yet. Create your first project!</p>
-                        </div>
-                    ) : (
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {projects.map((project: Project, index: React.Key | null | undefined) => (
-                                <ProjectTile key={index} project={project}/>
-                            ))}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div className="flex items-center justify-center">
+                        <CreateProjectButton/>
+                    </div>
+
+                    {projects.map((project: Project, index: React.Key | null | undefined) => (
+                        <ProjectTile key={index} project={project}/>
+                    ))}
+
+                    {projects.length === 0 && (
+                        <div className="col-span-full text-center py-4 text-gray-600">
+                            <p>No projects yet. Create your first project!</p>
                         </div>
                     )}
-                </>
+                </div>
             )}
         </div>
     );
