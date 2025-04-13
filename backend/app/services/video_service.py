@@ -24,7 +24,7 @@ class VideoService:
 
         headers = {
             "Authorization": f"Bearer {api_key}",
-            "Content-Type": "application/octet-stream"
+            "Content-Type": "video/mp4"
         }
         if metadata:
             try:
@@ -44,7 +44,8 @@ class VideoService:
                 )
                 response.raise_for_status()
 
-                file_url = response.json()["fileUrl"]
+                file_path = response.json()["filePath"]
+                file_url = f"https://upcdn.io/{account_id}/video{file_path}"
                 print(file_url)
                 print(user_email)
                 await self.video_collection.insert_one({
@@ -84,7 +85,7 @@ class VideoService:
 
     async def get_video_stats(self, id, user_email):
         return {
-            "video_url": "https://upcdn.io/.../annotated_video(1)(1)(1).mp4",
+            "video_url": "https://upcdn.io/W23MT6f/video/uploads/2025/04/13/bestTrackingSoFar.mp4",
             "stats": {
                 "850": {
                     "POSSESSION": {
