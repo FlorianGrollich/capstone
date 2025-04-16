@@ -3,9 +3,9 @@ import {RootState} from "../../../store.ts";
 import axiosClient from "../../../api/axiosClient.ts";
 
 export interface Project {
-    video_url: string;
+    _id: string;
     title: string;
-    state: 'finished' | 'loading' | 'error';
+    status: 'finished' | 'loading' | 'error';
 }
 
 export interface ProjectsState {
