@@ -7,9 +7,10 @@ from fastapi.responses import JSONResponse
 from capstone.backend.app.core.config import settings
 from capstone.backend.app.core.dependencies import get_video_service, get_current_user
 from capstone.backend.app.schemas.project import Project
+from capstone.backend.app.services.analysis_service import run_video_analysis
 from capstone.backend.app.services.video_service import VideoService
 
-from capstone.backend.app.utils.analyzer import run_video_analysis
+
 
 router = APIRouter()
 
