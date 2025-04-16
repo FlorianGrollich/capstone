@@ -7,8 +7,8 @@ DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # --- Model Paths ---
 BACKEND_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
-YOLO_MODEL_PATH = os.path.join(BACKEND_DIR, "ai/player_tracker/best.pt")
-TRACKNET_MODEL_PATH = os.path.join(BACKEND_DIR, "ai/ball_tracker/tracknetv4.pth")
+YOLO_MODEL_PATH = os.path.join(BACKEND_DIR, "ai/player_tracker/player_model_weights.pt")
+TRACKNET_MODEL_PATH = os.path.join(BACKEND_DIR, "ai/ball_tracker/ball_model_weights.pth")
 
 # --- Processing Parameters ---
 TRACKNET_WIDTH = 1024
