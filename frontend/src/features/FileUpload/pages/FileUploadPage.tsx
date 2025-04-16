@@ -1,6 +1,6 @@
 import React from 'react';
-import {useFileUploadHandler} from './hooks/useFileUploadHandler';
-import {FileUploadView} from './components/FileUploadView';
+import {useFileUploadHandler} from '../hooks/useFileUploadHandler.ts';
+import {FileUploadView} from '../components/FileUploadView.tsx';
 
 const FileUploadPage: React.FC = () => {
     const fileUploadProps = useFileUploadHandler();

@@ -1,6 +1,6 @@
 import {createSlice, createAsyncThunk, PayloadAction} from '@reduxjs/toolkit';
 import {AxiosProgressEvent, CancelTokenSource, isCancel, isAxiosError} from 'axios';
-import {RootState} from '../../../store';
+import {RootState} from '../../../store.ts';
 import axiosClient from "../../../api/axiosClient.ts";
 
 

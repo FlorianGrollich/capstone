@@ -1,7 +1,7 @@
 import React, {useState, useRef, useCallback, useEffect, DragEvent, ChangeEvent} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import axios, {CancelTokenSource} from 'axios';
-import {AppDispatch,} from '../../../store';
+import {AppDispatch,} from '../../../store.ts';
 import {resetUploadState, selectFileUploadState, uploadFile} from "../slices/fileUploadSlice.ts";
 import {useNavigate} from "react-router-dom";
 

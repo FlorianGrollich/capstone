@@ -2,7 +2,7 @@ import {configureStore} from '@reduxjs/toolkit';
 import loginFormReducer from './features/Auth/slices/loginFormState';
 import registerFormReducer from './features/Auth/slices/registerFormState';
 import authReducer from './features/Auth/slices/authState';
-import fileUploadReducer from './features/Analysis/slices/fileUploadSlice';
+import fileUploadReducer from './features/FileUpload/slices/fileUploadSlice.ts';
 import projectReducer from './features/Project/slices/projectSlice';
 import analysisReducer from './features/Analysis/slices/analysisSlice';
 
