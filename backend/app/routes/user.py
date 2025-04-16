@@ -1,9 +1,9 @@
 from fastapi import APIRouter
 from fastapi.params import Depends
 
-from app.core.depedencies import get_user_service
-from app.schemas.user import AuthenticationDTO
-from app.services.user_service import UserService
+from capstone.backend.app.core.depedencies import get_user_service
+from capstone.backend.app.schemas.user import AuthenticationDTO
+from capstone.backend.app.services.user_service import UserService
 
 router = APIRouter()
 

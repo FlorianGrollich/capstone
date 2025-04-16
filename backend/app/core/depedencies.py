@@ -3,11 +3,11 @@ from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from motor.motor_asyncio import AsyncIOMotorCollection
 from starlette import status
 
-from app.core.database import get_mongo_collection
-from app.services.user_service import UserService
-from app.core.config import settings
-from app.services.video_service import VideoService
-from app.utils.authentication import decode_jwt
+from capstone.backend.app.core.database import get_mongo_collection
+from capstone.backend.app.services.user_service import UserService
+from capstone.backend.app.core.config import settings
+from capstone.backend.app.services.video_service import VideoService
+from capstone.backend.app.utils.authentication import decode_jwt
 
 
 def get_settings():

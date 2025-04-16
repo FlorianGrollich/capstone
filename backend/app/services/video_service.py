@@ -4,7 +4,7 @@ import json
 from fastapi import HTTPException
 from motor.motor_asyncio import AsyncIOMotorCollection
 
-from app.schemas.project import Project, ProjectState
+from capstone.backend.app.schemas.project import Project, ProjectState
 
 
 class VideoService:
@@ -50,7 +50,8 @@ class VideoService:
                 print(user_email)
                 await self.video_collection.insert_one({
                     "email": [user_email],
-                    "file_url": file_url
+                    "file_url": file_url,
+                    "status": "pending",
                 })
 
                 return response.json()
@@ -69,6 +70,24 @@ class VideoService:
                 raise HTTPException(status_code=exc.response.status_code, detail=error_detail)
             except ValueError as ve:
                 raise HTTPException(status_code=400, detail=str(ve))
+
+    async def update_status(self, file_url):
+        await self.video_collection.update_one(
+            {"file_url": file_url},
+            {"$set": {"status": "processing"}}
+        )
+
+    async def finish_stats(self, file_url: str, stats: dict):
+        print(f"calling finish stats: {file_url}")
+        file_url.replace("raw", "video")
+        try:
+            test = await self.video_collection.update_one(
+                {"file_url": file_url},
+                {"$set": {"status": "finished", "analysis_results": stats}}
+            )
+            print(test)
+        except Exception as e:
+            print(f"Error on finish stats: {e}")
 
     async def get_projects(self, user_email):
         return [

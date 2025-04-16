@@ -3,7 +3,7 @@ from typing import Optional
 from bson import ObjectId
 from pydantic import BaseModel, Field, ConfigDict
 
-from app.utils.types import PyObjectId
+from capstone.backend.app.utils.types import PyObjectId
 
 
 class UserModel(BaseModel):
