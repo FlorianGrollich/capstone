@@ -1,4 +1,9 @@
-from torch.utils.data import DataLoader
+import os
+import torch
+from torch.utils.data import Dataset, DataLoader
+import numpy as np
+import torchvision.transforms as transforms
+from PIL import Image
 
 
 def generate_heatmap(center_x, center_y, h, w, sigma=5):
@@ -8,14 +13,9 @@ def generate_heatmap(center_x, center_y, h, w, sigma=5):
 
 class TrackNetDataset(Dataset):
     def __init__(self, root_dir, target_size=(288, 512), transform=None):
-        """
-        Args:
-            root_dir (str): Directory with all the frame folders.
-            target_size (tuple): Desired (height, width) for images and heatmaps, e.g., (288, 512).
-            transform (callable, optional): Optional transform to be applied on images.
-        """
+
         self.root_dir = root_dir
-        self.target_size = target_size  # New parameter for flexible image size
+        self.target_size = target_size
         self.transform = transform
         self.frame_folders = sorted([f for f in os.listdir(root_dir) if f.startswith('frame')])
 
@@ -74,8 +74,3 @@ class TrackNetDataset(Dataset):
         images = torch.cat(images, dim=0)  # (9, H, W), where H, W are from target_size
         heatmaps = torch.stack(heatmaps, dim=0)  # (3, H, W)
         return images, heatmaps
-
-
-# Example usage
-dataset = TrackNetDataset(root_dir='merged-final', target_size=(720 ,1280))
-dataloader = DataLoader(dataset, batch_size=16, shuffle=True)
