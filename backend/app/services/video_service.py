@@ -53,6 +53,7 @@ class VideoService:
                     "email": [user_email],
                     "file_url": file_url,
                     "status": "pending",
+                    "title": file_path[1::]
                 })
 
                 return response.json()
@@ -105,5 +106,3 @@ class VideoService:
             return None
 
         return Project(**project)
-
-
