@@ -25,7 +25,7 @@ class TestPasswordFunctions:
 
         assert verify_password(password, hashed) is True
 
- 
+
         assert verify_password("wrongPassword", hashed) is False
 
     @patch('capstone.backend.app.core.config.Settings.pwd_ctx')  # Fix: patch class variable
