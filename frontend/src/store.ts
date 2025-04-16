@@ -3,7 +3,8 @@ import loginFormReducer from './features/Auth/slices/loginFormState';
 import registerFormReducer from './features/Auth/slices/registerFormState';
 import authReducer from './features/Auth/slices/authState';
 import fileUploadReducer from './features/Analysis/slices/fileUploadSlice';
-import projectReducer from './features/Project/slices/projectSlice'
+import projectReducer from './features/Project/slices/projectSlice';
+import analysisReducer from './features/Analysis/slices/analysisSlice';
 
 
 const store = configureStore({
@@ -13,6 +14,7 @@ const store = configureStore({
         fileUpload: fileUploadReducer,
         authState: authReducer,
         project: projectReducer,
+        analysis: analysisReducer
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({

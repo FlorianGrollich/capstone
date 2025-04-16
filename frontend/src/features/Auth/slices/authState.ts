@@ -1,5 +1,6 @@
 import {createSlice, PayloadAction, createAsyncThunk} from '@reduxjs/toolkit';
-import axios, {AxiosError} from 'axios';
+import  {AxiosError} from 'axios';
+import axiosClient from "../../../api/axiosClient.ts";
 
 interface AuthState {
     token: string | null;
@@ -17,7 +18,7 @@ export const login = createAsyncThunk(
     'auth/login',
     async ({email, password}: { email: string; password: string }, {rejectWithValue}) => {
         try {
-            const response = await axios.post('http://127.0.0.1:8000/login', {email, password});
+            const response = await axiosClient.post('/login', {email, password});
             return response.data;
         } catch (error) {
             const e = error as AxiosError;
@@ -30,7 +31,7 @@ export const register = createAsyncThunk(
     'auth/register',
     async ({email, password}: { email: string; password: string }, {rejectWithValue}) => {
         try {
-            const response = await axios.post('http://127.0.0.1:8000/register', {email, password});
+            const response = await axiosClient.post('/register', {email, password});
             return response.data;
 
         } catch (error) {
