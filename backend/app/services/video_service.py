@@ -47,13 +47,14 @@ class VideoService:
 
                 file_path = response.json()["filePath"]
                 file_url = f"https://upcdn.io/{account_id}/video{file_path}"
+                title = file_path.split("/")[-1]
                 print(file_url)
                 print(user_email)
                 await self.video_collection.insert_one({
                     "email": [user_email],
                     "file_url": file_url,
-                    "status": "pending",
-                    "title": file_path[1::]
+                    "status": "loading",
+                    "title": title
                 })
 
                 return response.json()
