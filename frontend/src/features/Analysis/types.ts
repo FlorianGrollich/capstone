@@ -1,25 +1,26 @@
-
 export interface TeamStats {
-    team1?: number;
-    team2?: number;
+    team1: number | null;
+    team2: number | null;
 }
 
 export interface StatValues {
-    POSSESSION?: TeamStats;
-    PASS?: TeamStats;
-    [key: string]: TeamStats | undefined;
+    POSSESSION: TeamStats | null;
+    PASS: TeamStats | null;
 }
 
 export interface StatsData {
-    [timestampMs: string]: StatValues;
+    [frameCount: string]: StatValues;
 }
 
-export interface ProjectData {
-    video_url: string;
+export interface AnalysisResults {
     stats: StatsData;
 }
 
-export interface CurrentStats {
-    POSSESSION: TeamStats;
-    PASS: TeamStats;
+export interface ProjectResponse {
+    _id: string;
+    email: string[];
+    file_url: string;
+    analysis_results: AnalysisResults;
+    status: string;
+    title: string;
 }
