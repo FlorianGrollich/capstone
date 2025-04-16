@@ -3,8 +3,8 @@ from typing import Optional
 from fastapi import HTTPException
 from motor.motor_asyncio import AsyncIOMotorCollection
 
-from app.schemas.user import UserModel, AuthenticationDTO
-from app.utils.authentication import create_jwt, get_password_hash, verify_password
+from capstone.backend.app.schemas.user import UserModel, AuthenticationDTO
+from capstone.backend.app.utils.authentication import create_jwt, get_password_hash, verify_password
 
 
 class UserService:

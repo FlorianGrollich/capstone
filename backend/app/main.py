@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
-from app.routes import user, project
+from capstone.backend.app.routes import user, project
 
 app = FastAPI()
 

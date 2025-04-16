@@ -1,6 +1,6 @@
 from motor.motor_asyncio import AsyncIOMotorClient
 
-from app.core.config import settings
+from capstone.backend.app.core.config import settings
 
 client = AsyncIOMotorClient(settings.mongo_url)
 db = client.test

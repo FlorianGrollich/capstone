@@ -3,9 +3,9 @@ from typing import Any
 
 import jwt
 
-from app.core.config import settings
-from app.schemas.token import TokenData
-from app.schemas.user import UserModel
+from capstone.backend.app.core.config import settings
+from capstone.backend.app.schemas.token import TokenData
+from capstone.backend.app.schemas.user import UserModel
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:

@@ -4,19 +4,28 @@ from fastapi import APIRouter, File, UploadFile, HTTPException
 from fastapi.params import Depends
 from fastapi.responses import JSONResponse
 
-from app.core.config import settings
-from app.core.depedencies import get_video_service, get_current_user
-from app.schemas.project import Project
-from app.services.video_service import VideoService
+from capstone.backend.app.core.config import settings
+from capstone.backend.app.core.dependencies import get_video_service, get_current_user
+from capstone.backend.app.schemas.project import Project
+from capstone.backend.app.services.analysis_service import run_video_analysis
+from capstone.backend.app.services.video_service import VideoService
+
+
 
 router = APIRouter()
 
 
+from fastapi import APIRouter, File, UploadFile, HTTPException, BackgroundTasks
+from fastapi.params import Depends
+from fastapi.responses import JSONResponse
+
 @router.post("/upload")
-async def upload_video_file(file: UploadFile = File(...),
-                            video_service: VideoService = Depends(get_video_service),
-                            user_payload: dict = Depends(get_current_user)
-                            ):
+async def upload_video_file(
+    file: UploadFile = File(...),
+    video_service: VideoService = Depends(get_video_service),
+    user_payload: dict = Depends(get_current_user),
+    background_tasks: BackgroundTasks = BackgroundTasks()
+):
     if not settings.bytescale_api_key or not settings.bytescale_account_id:
         raise HTTPException(status_code=500, detail="Server configuration error: Upload service credentials not set.")
 
@@ -35,6 +44,7 @@ async def upload_video_file(file: UploadFile = File(...),
 
         user_email = user_payload.get("email")
 
+        # Upload the video to Bytescale
         response_data = await video_service.upload_video(
             account_id=settings.bytescale_account_id,
             api_key=settings.bytescale_api_key,
@@ -42,6 +52,13 @@ async def upload_video_file(file: UploadFile = File(...),
             request_body=file_content,
             metadata=upload_metadata,
             querystring=upload_querystring
+        )
+
+        file_url = response_data.get("fileUrl")
+
+        # Add video analysis as a background task using the URL
+        background_tasks.add_task(
+            analyze_and_update_video, file_url, video_service, user_email
         )
 
         return JSONResponse(content=response_data, status_code=200)
@@ -53,6 +70,25 @@ async def upload_video_file(file: UploadFile = File(...),
         traceback.print_exc()
         raise HTTPException(status_code=500, detail="An internal server error occurred during file processing.")
 
+async def analyze_and_update_video(file_url: str, video_service: VideoService, user_email: str):
+    """
+    Background task to analyze the video using the URL directly and update MongoDB.
+    """
+    try:
+        analysis_results = await run_video_analysis(file_url)
+        new_url = file_url.replace("raw", "video")
+        print("new url: ", new_url)
+        stats = await video_service.finish_stats(new_url, analysis_results)
+        print(stats)
+
+    except Exception as e:
+        # Log error and update status in MongoDB
+        import logging
+        logging.error(f"Error during video analysis: {e}")
+        await video_service.video_collection.update_one(
+            {"file_url": file_url},
+            {"$set": {"status": "error", "error_message": str(e)}}
+        )
 
 @router.get("/projects")
 async def get_projects(
