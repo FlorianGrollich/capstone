@@ -77,7 +77,6 @@ const AnalysisPage: React.FC = () => {
         <div className="container mx-auto p-4 lg:p-6 max-w-4xl">
             <h1 className="text-2xl lg:text-3xl font-bold mb-6 text-gray-800 text-center">Video Analysis</h1>
 
-            {/* Video Player Section */}
             <div className="video-container mb-8 shadow-lg rounded-lg overflow-hidden">
                 <div data-vjs-player>
                     <video ref={videoNodeRef} className="video-js vjs-big-play-centered vjs-16-9" crossOrigin="anonymous"></video>
