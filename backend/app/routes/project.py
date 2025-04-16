@@ -5,7 +5,7 @@ from fastapi.params import Depends
 from fastapi.responses import JSONResponse
 
 from capstone.backend.app.core.config import settings
-from capstone.backend.app.core.depedencies import get_video_service, get_current_user
+from capstone.backend.app.core.dependencies import get_video_service, get_current_user
 from capstone.backend.app.schemas.project import Project
 from capstone.backend.app.services.video_service import VideoService
 
