@@ -1,26 +1,31 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import {ProjectData, StatsData, CurrentStats,  StatValues} from "../types";
+import { ProjectResponse, StatsData, StatValues } from "../types";
 import axiosClient from "../../../api/axiosClient.ts";
 import axios from "axios";
 
+// Type for frontend use that extends ProjectResponse with video_url instead of file_url
+interface ProjectData extends Omit<ProjectResponse, 'file_url'> {
+    video_url: string;
+}
 
 interface AnalysisState {
     projectData: ProjectData | null;
     loading: 'idle' | 'pending' | 'succeeded' | 'failed';
     error: string | null;
     currentTime: number;
-    currentStats: CurrentStats;
+    currentStats: StatValues;
 }
-
 
 const calculateCurrentStats = (
     statsData: StatsData | undefined | null,
     currentTimeSeconds: number
-): CurrentStats => {
-    const defaultStats: CurrentStats = {
-        POSSESSION: {},
-        PASS: {},
+): StatValues => {
+    // Default stats with null values
+    const defaultStats: StatValues = {
+        POSSESSION: null,
+        PASS: null,
     };
+
     if (!statsData) {
         return defaultStats;
     }
@@ -32,36 +37,26 @@ const calculateCurrentStats = (
 
     const relevantTimestamps = sortedTimestamps.filter(ts => ts <= currentTimeMs);
 
-    const mergedStats = relevantTimestamps.reduce<CurrentStats>(
+    // Start with default stats and merge in the values from each timestamp
+    return relevantTimestamps.reduce<StatValues>(
         (acc, ts) => {
             const statsAtTs = statsData[String(ts)];
-            for (const statType in statsAtTs) {
-                if (!acc[statType as keyof CurrentStats]) {
-                    acc[statType as keyof CurrentStats] = {};
-                }
 
-                const teamStats = statsAtTs[statType as keyof StatValues];
-                if (teamStats) {
-                    const currentStatType = acc[statType as keyof CurrentStats];
-                    if(currentStatType) { // Type guard
-                        if (teamStats.team1 !== undefined) {
-                            currentStatType.team1 = teamStats.team1;
-                        }
-                        if (teamStats.team2 !== undefined) {
-                            currentStatType.team2 = teamStats.team2;
-                        }
-                    }
+            // For each stat type (POSSESSION, PASS)
+            Object.keys(statsAtTs).forEach((statType) => {
+                const key = statType as keyof StatValues;
+                const statValue = statsAtTs[key];
+
+                if (statValue) {
+                    acc[key] = statValue;
                 }
-            }
+            });
+
             return acc;
         },
         JSON.parse(JSON.stringify(defaultStats))
     );
-
-    return mergedStats;
 };
-
-
 
 const initialState: AnalysisState = {
     projectData: null,
@@ -69,21 +64,31 @@ const initialState: AnalysisState = {
     error: null,
     currentTime: 0,
     currentStats: {
-        POSSESSION: {},
-        PASS: {},
+        POSSESSION: null,
+        PASS: null,
     },
 };
-
 
 export const fetchProjectData = createAsyncThunk<ProjectData, string, { rejectValue: string }>(
     'analysis/fetchProjectData',
     async (projectId, { rejectWithValue }) => {
         try {
-            const response = await axiosClient.get<ProjectData>(`/project/${projectId}`);
-            if (!response.data || !response.data.video_url || !response.data.stats) {
+            const response = await axiosClient.get<ProjectResponse>(`/project/${projectId}`);
+            if (!response.data || !response.data.file_url || !response.data.analysis_results.stats) {
                 throw new Error("Invalid project data received");
             }
-            return response.data;
+
+            // Transform ProjectResponse to ProjectData (file_url → video_url)
+            const projectData: ProjectData = {
+                _id: response.data._id,
+                email: response.data.email,
+                video_url: response.data.file_url,
+                status: response.data.status,
+                title: response.data.title,
+                analysis_results: response.data.analysis_results
+            };
+
+            return projectData;
         } catch (error) {
             let errorMessage = "Failed to fetch project data";
             if (axios.isAxiosError(error) && error.response) {
@@ -96,14 +101,16 @@ export const fetchProjectData = createAsyncThunk<ProjectData, string, { rejectVa
     }
 );
 
-
 const analysisSlice = createSlice({
     name: 'analysis',
     initialState,
     reducers: {
         updateCurrentTime: (state, action: PayloadAction<number>) => {
             state.currentTime = action.payload;
-            state.currentStats = calculateCurrentStats(state.projectData?.stats, state.currentTime);
+            state.currentStats = calculateCurrentStats(
+                state.projectData?.analysis_results.stats,
+                state.currentTime
+            );
         },
     },
     extraReducers: (builder) => {
@@ -115,12 +122,15 @@ const analysisSlice = createSlice({
             .addCase(fetchProjectData.fulfilled, (state, action: PayloadAction<ProjectData>) => {
                 state.loading = 'succeeded';
                 state.projectData = action.payload;
-                state.currentStats = calculateCurrentStats(state.projectData.stats, state.currentTime);
+                state.currentStats = calculateCurrentStats(
+                    state.projectData.analysis_results.stats,
+                    state.currentTime
+                );
                 state.error = null;
             })
             .addCase(fetchProjectData.rejected, (state, action) => {
                 state.loading = 'failed';
-                state.error = action.payload ?? "Unknown error occurred"; // Use rejectValue
+                state.error = action.payload ?? "Unknown error occurred";
                 state.projectData = null;
             });
     },

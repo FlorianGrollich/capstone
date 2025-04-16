@@ -8,7 +8,7 @@ import Layout from "./components/Layout.tsx";
 import {Provider} from "react-redux";
 import store from "./store.ts";
 import AnalysisPage from "./features/Analysis/AnalysisPage.tsx";
-import FileUploadPage from "./features/Analysis/FileUploadPage.tsx";
+import FileUploadPage from "./features/FileUpload/pages/FileUploadPage.tsx";
 
 
 const App: React.FC = () => {

@@ -1,5 +1,5 @@
 import {createSlice, PayloadAction, createAsyncThunk} from '@reduxjs/toolkit';
-import  {AxiosError} from 'axios';
+import {AxiosError} from 'axios';
 import axiosClient from "../../../api/axiosClient.ts";
 
 interface AuthState {
@@ -33,10 +33,9 @@ export const register = createAsyncThunk(
         try {
             const response = await axiosClient.post('/register', {email, password});
             return response.data;
-
         } catch (error) {
             console.log("Error creating register: ", error);
-            return rejectWithValue(error ?? 'An unknown error occurred');
+            return rejectWithValue(error);
         }
     }
 );
@@ -61,8 +60,12 @@ const authSlice = createSlice({
                 state.token = action.payload;
                 localStorage.setItem('token', action.payload);
             })
-            .addCase(login.rejected, (state) => {
+            .addCase(login.rejected, (state, action) => {
                 state.loading = false;
+                // Safe error extraction
+                const axiosError = action.payload as AxiosError;
+                const errorResponse = axiosError?.response?.data as { message?: string };
+                state.error = errorResponse?.message || 'Login failed. Please check your credentials.';
             })
             .addCase(register.pending, (state) => {
                 state.loading = true;
@@ -74,9 +77,12 @@ const authSlice = createSlice({
                 console.log("set token", action.payload);
                 localStorage.setItem('token', action.payload);
             })
-            .addCase(register.rejected, (state) => {
+            .addCase(register.rejected, (state, action) => {
                 state.loading = false;
-
+                // Safe error extraction
+                const axiosError = action.payload as AxiosError;
+                const errorResponse = axiosError?.response?.data as { message?: string };
+                state.error = errorResponse?.message || 'Registration failed. Please try again.';
             });
     },
 });
