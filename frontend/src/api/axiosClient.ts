@@ -1,6 +1,6 @@
 import axios, { AxiosInstance, InternalAxiosRequestConfig, AxiosResponse } from 'axios';
 
-const API_URL = 'https://7iv6tak6d55nyt-8000.proxy.runpod.net';
+const API_URL = import.meta.env.VITE_API_URL;
 
 const axiosClient: AxiosInstance = axios.create({
   baseURL: API_URL,
