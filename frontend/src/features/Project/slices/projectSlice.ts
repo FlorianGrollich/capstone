@@ -54,4 +54,5 @@ const projectsSlice = createSlice({
 
 export const selectProject = (state: RootState) => state.project;
 
+
 export default projectsSlice.reducer;

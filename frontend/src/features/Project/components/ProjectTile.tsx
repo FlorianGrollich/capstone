@@ -8,13 +8,15 @@ interface ProjectTileProps {
 }
 
 const ProjectTile: React.FC<ProjectTileProps> = ({project}) => {
+    const navigate = useNavigate();
+    const isLoading = project.status === 'loading';
 
     const renderContent = () => {
         switch (project.status) {
             case 'loading':
                 return (
                     <div className="flex flex-col items-center justify-center h-full">
-                        <FiLoader className="h-16 w-16 text-primary mb-3"/>
+                        <FiLoader className="h-16 w-16 text-primary mb-3 animate-spin"/>
                         <p className="font-semibold text-gray-600">Processing...</p>
                     </div>
                 );
@@ -35,13 +37,18 @@ const ProjectTile: React.FC<ProjectTileProps> = ({project}) => {
         }
     };
 
-    const navigate = useNavigate();
+    const handleClick = () => {
+        if (!isLoading) {
+            navigate(`/analysis/${project._id}`);
+        }
+    };
 
     return (
         <div
-            className="border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow w-full h-48 cursor-pointer"
-            onClick={() => navigate(`/analysis/${project._id}`)}>
-            <div className="bg-gray-100 relative flex items-center justify-center">
+            className={`border rounded-lg overflow-hidden shadow-sm transition-shadow w-full h-48
+                      ${isLoading ? 'bg-gray-200 opacity-70' : 'hover:shadow-md cursor-pointer'}`}
+            onClick={handleClick}>
+            <div className={`${isLoading ? 'bg-gray-200' : 'bg-gray-100'} relative flex items-center justify-center`}>
                 {renderContent()}
             </div>
             <div className="p-3 h-6">

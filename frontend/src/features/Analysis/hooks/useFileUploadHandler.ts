@@ -2,7 +2,8 @@ import React, {useState, useRef, useCallback, useEffect, DragEvent, ChangeEvent}
 import {useDispatch, useSelector} from 'react-redux';
 import axios, {CancelTokenSource} from 'axios';
 import {AppDispatch,} from '../../../store';
-import {resetUploadState, selectFileUploadState, uploadFile} from "../slices/fileUploadSlice.ts"; // Adjust paths
+import {resetUploadState, selectFileUploadState, uploadFile} from "../slices/fileUploadSlice.ts";
+import {useNavigate} from "react-router-dom";
 
 export interface FileUploadHookResult {
     selectedFile: File | null;
@@ -25,6 +26,7 @@ export interface FileUploadHookResult {
 export const useFileUploadHandler = (): FileUploadHookResult => {
     const dispatch = useDispatch<AppDispatch>();
     const {uploadStatus, uploadProgress, error, uploadedFileUrl} = useSelector(selectFileUploadState);
+    const navigate = useNavigate();
 
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [isDraggingOver, setIsDraggingOver] = useState(false);
@@ -136,9 +138,29 @@ export const useFileUploadHandler = (): FileUploadHookResult => {
         }
     }, [isLoading]);
 
+    useEffect(() => {
+        if (uploadProgress === 100) {
+            const timer = setTimeout(() => {
+                navigate('/');
+                dispatch(resetUploadState());
+                setSelectedFile(null);
+                setIsDraggingOver(false);
+
+            }, 500);
+
+            return () => clearTimeout(timer);
+        }
+    }, [uploadStatus, uploadProgress, navigate, reset]);
+
     const handleClearSelection = useCallback(() => {
         reset();
     }, [reset]);
+    useEffect(() => {
+        if (uploadStatus === 'succeeded') {
+            navigate('/');
+            reset();
+        }
+    }, [uploadStatus, navigate]);
 
     useEffect(() => {
         const currentToken = cancelTokenSourceRef.current;

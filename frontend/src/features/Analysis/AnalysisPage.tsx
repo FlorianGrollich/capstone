@@ -107,6 +107,8 @@ const AnalysisPage: React.FC = () => {
                         team2Value={currentStats.PASS?.team2}
                         maxValue={maxPassesValue}
                     />
+
+
                 </div>
             </div>
         </div>
