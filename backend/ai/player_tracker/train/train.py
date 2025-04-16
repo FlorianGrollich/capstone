@@ -13,7 +13,7 @@ BATCH_SIZE = 4
 
 model = YOLO(MODEL_VARIANT)
 
-# --- Start Training ---
+
 print("Starting training...")
 results = model.train(
     data=DATA_YAML_PATH,
