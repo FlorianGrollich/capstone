@@ -1,10 +1,11 @@
 import httpx
 import json
 
+from bson import ObjectId
 from fastapi import HTTPException
 from motor.motor_asyncio import AsyncIOMotorCollection
 
-from capstone.backend.app.schemas.project import Project, ProjectState
+from capstone.backend.app.schemas.project import Project, ProjectStatus, ProjectSummary
 
 
 class VideoService:
@@ -46,12 +47,14 @@ class VideoService:
 
                 file_path = response.json()["filePath"]
                 file_url = f"https://upcdn.io/{account_id}/video{file_path}"
+                title = file_path.split("/")[-1]
                 print(file_url)
                 print(user_email)
                 await self.video_collection.insert_one({
                     "email": [user_email],
                     "file_url": file_url,
-                    "status": "pending",
+                    "status": "loading",
+                    "title": title
                 })
 
                 return response.json()
@@ -89,112 +92,18 @@ class VideoService:
         except Exception as e:
             print(f"Error on finish stats: {e}")
 
-    async def get_projects(self, user_email):
-        return [
-            Project(video_url="https://upcdn.io/.../annotated_video(1)(1)(1).mp4",
-                    title="Test title",
-                    state=ProjectState.FINISHED),
-            Project(video_url="https://upcdn.io/.../annotated_video(1)(1)(1).mp4",
-                    title="Test title",
-                    state=ProjectState.LOADING),
-            Project(video_url="https://upcdn.io/.../annotated_video(1)(1)(1).mp4",
-                    title="Test title",
-                    state=ProjectState.ERROR),
-        ]
+    async def get_projects(self, user_email: str) -> list[ProjectSummary]:
+        cursor = self.video_collection.find({"email": [user_email]})
+        projects = []
+        documents = await cursor.to_list(length=None)
+        for doc in documents:
+            projects.append(ProjectSummary(title=doc.get("title"), status=doc.get("status"), _id=doc.get("_id")))
 
-    async def get_video_stats(self, id, user_email):
-        return {
-            "video_url": "https://upcdn.io/W23MT6f/video/uploads/2025/04/13/bestTrackingSoFar.mp4",
-            "stats": {
-                "850": {
-                    "POSSESSION": {
-                        "team1": 33,
-                        "team2": 67
-                    },
-                    "PASS": {
-                        "team1": 6,
-                        "team2": 3
-                    }
-                },
-                "2300": {
-                    "POSSESSION": {
-                        "team1": 36,
-                        "team2": 64
-                    },
-                    "PASS": {
-                        "team1": 9,
-                        "team2": 4
-                    }
-                },
-                "3870": {
-                    "POSSESSION": {
-                        "team1": 40,
-                        "team2": 60
-                    },
-                    "PASS": {
-                        "team1": 11,
-                        "team2": 6
-                    }
-                },
-                "4890": {
-                    "PASS": {
-                        "team1": 13,
-                        "team2": 9
-                    }
-                },
-                "5630": {
-                    "POSSESSION": {
-                        "team1": 43,
-                        "team2": 57
-                    }
-                },
-                "6420": {
-                    "PASS": {
-                        "team1": 15
-                    }
-                },
-                "7150": {
-                    "PASS": {
-                        "team2": 11
-                    }
-                },
-                "8030": {
-                    "POSSESSION": {
-                        "team1": 46,
-                        "team2": 54
-                    },
-                    "PASS": {
-                        "team1": 16
-                    }
-                },
-                "9020": {
-                    "POSSESSION": {
-                        "team1": 48,
-                        "team2": 52
-                    },
-                    "PASS": {
-                        "team2": 13
-                    }
-                },
-                "10010": {
-                    "PASS": {
-                        "team1": 18,
-                        "team2": 14
-                    }
-                },
-                "11250": {
-                    "POSSESSION": {
-                        "team1": 50,
-                        "team2": 50
-                    },
-                    "PASS": {
-                        "team1": 20
-                    }
-                },
-                "12680": {
-                    "PASS": {
-                        "team2": 16
-                    }
-                }
-            }
-        }
+        return projects
+
+    async def get_video_stats(self, project_id: str, user_email: str):
+        project = await self.video_collection.find_one({"_id": ObjectId(project_id), "email": [user_email]})
+        if not project:
+            return None
+
+        return Project(**project)

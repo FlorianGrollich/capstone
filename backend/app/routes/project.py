@@ -6,7 +6,7 @@ from fastapi.responses import JSONResponse
 
 from capstone.backend.app.core.config import settings
 from capstone.backend.app.core.dependencies import get_video_service, get_current_user
-from capstone.backend.app.schemas.project import Project
+from capstone.backend.app.schemas.project import Project, ProjectSummary
 from capstone.backend.app.services.analysis_service import run_video_analysis
 from capstone.backend.app.services.video_service import VideoService
 
@@ -93,7 +93,7 @@ async def analyze_and_update_video(file_url: str, video_service: VideoService, u
 @router.get("/projects")
 async def get_projects(
         user_payload: dict = Depends(get_current_user),
-        video_service: VideoService = Depends(get_video_service)) -> List[Project]:
+        video_service: VideoService = Depends(get_video_service)) -> List[ProjectSummary]:
     user_email = user_payload.get("email")
     projects = await video_service.get_projects(user_email)
     return projects
